@@ -4,8 +4,8 @@
  * http://www.opensource.org/licenses/mit-license.php.
  */
 
+import { startServers, stopServers } from "./servers.js";
 import { createRequire } from "module";
-import { startServers } from "./servers.js";
 const require = createRequire(import.meta.url);
 const CONFIG = require('../config.json');
 
