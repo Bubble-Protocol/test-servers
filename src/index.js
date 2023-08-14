@@ -5,25 +5,17 @@
  */
 
 import { createRequire } from "module";
+import { startServers } from "./servers.js";
 const require = createRequire(import.meta.url);
 const CONFIG = require('../config.json');
-import { BLOCKCHAIN_SERVER_URL, BUBBLE_SERVER_URL, BUBBLE_WS_SERVER_URL, startServers, stopServers } from "./test-servers.js";
 
 console.trace = CONFIG.traceOn ? Function.prototype.bind.call(console.info, console, "[trace]") : function() {};
 console.debug = CONFIG.debugOn ? Function.prototype.bind.call(console.info, console, "[debug]") : function() {};
-
 
 main();
 
 async function main() {
   try {
-    startServers()
-      .then(status => {
-        console.log('Ganache Server:', BLOCKCHAIN_SERVER_URL);
-        console.log('HTTP Bubble Server:', BUBBLE_SERVER_URL);
-        console.log('WebSocket Bubble Server:', BUBBLE_WS_SERVER_URL);
-      })
-      .catch(console.error);
 
     process.on('SIGTERM', () => {
       stopServers();
@@ -33,7 +25,14 @@ async function main() {
       stopServers();
     });
 
+    const {ganacheUrl, bubbleServerUrl} = await startServers(CONFIG);
+
+    console.log('Servers started:')
+    console.log(' - Ganache Server:', ganacheUrl);
+    console.log(' - Bubble Server:', bubbleServerUrl);
+
   } catch (err) {
     console.error("fatal error: " + err);
+    stopServers();
   }
 }

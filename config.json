@@ -1,4 +1,13 @@
 {
+  "ganacheOptions": {
+    "port": 8545,
+    "mnemonic": "foil message analyst universe oval sport super eye spot easily veteran oblige"
+  },
+  "bubbleServerOptions": {
+    "port": 8131,
+    "protocol": "http",
+    "accVersion": "0.0.2"
+  },
   "traceOn": true,
   "debugOn": true
 }
