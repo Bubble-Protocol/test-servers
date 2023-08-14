@@ -9,9 +9,9 @@ let ganacheServer, bubbleServer;
 
 
 export async function startServers(config={}) {
-  const ganacheUrl = await startGanache(config.ganacheOptions);
-  const bubbleServerUrl = await startBubbleServer(ganacheUrl, config.bubbleServerOptions);
-  return {ganacheUrl, bubbleServerUrl};
+  const {url: ganacheUrl, chainId} = await startGanache(config.ganacheOptions);
+  const bubbleServerUrl = await startBubbleServer(chainId, ganacheUrl, config.bubbleServerOptions);
+  return {chainId, ganacheUrl, bubbleServerUrl};
 }
 
 export function stopServers() {
@@ -22,21 +22,22 @@ export function stopServers() {
 async function startGanache(options={}) {
   const hostname = options.server ? options.server.host || '127.0.0.1' : '127.0.0.1';
   const port = options.port || 8545;
+  const chainId = options["chain_id"] || 1337;
   ganacheServer = new GanacheServer(port, options);
   await ganacheServer.start();
-  return 'http://'+hostname+':'+port
+  return {url: 'http://'+hostname+':'+port, chainId}
 }
 
-async function startBubbleServer(ganacheUrl, options={}) {
+async function startBubbleServer(chainId, ganacheUrl, options={}) {
   let protocol = options.protocol || 'http:';
   if (protocol.slice(-1) !== ':') protocol += ':';
   const hostname = options.hostname || '127.0.0.1';
   const port = options.port || 8131;
-  const blockchainProvider = new blockchainProviders.Web3Provider(options.chainId || 1, new Web3(ganacheUrl), options.accVersion || '0.0.2');
+  const blockchainProvider = new blockchainProviders.Web3Provider(chainId, new Web3(ganacheUrl), options.accVersion || '0.0.2');
   bubbleServer = 
     protocol === 'ws:'
     ? new RamBasedBubbleServerWebSocket('ws://'+hostname, options.port || 8131, blockchainProvider)
     : new RamBasedBubbleServer('http://'+hostname, options.port || 8131, blockchainProvider);
   await bubbleServer.start();
-  return protocol+'//'+hostname+':'+port
+  return protocol+'//'+hostname+':'+port;
 }

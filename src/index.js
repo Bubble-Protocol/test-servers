@@ -25,9 +25,10 @@ async function main() {
       stopServers();
     });
 
-    const {ganacheUrl, bubbleServerUrl} = await startServers(CONFIG);
+    const {chainId, ganacheUrl, bubbleServerUrl} = await startServers(CONFIG);
 
     console.log('Servers started:')
+    console.log(' - Chain ID:', chainId);
     console.log(' - Ganache Server:', ganacheUrl);
     console.log(' - Bubble Server:', bubbleServerUrl);
 

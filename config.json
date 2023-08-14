@@ -1,6 +1,7 @@
 {
   "ganacheOptions": {
     "port": 8545,
+    "chain_id": 1337,
     "mnemonic": "foil message analyst universe oval sport super eye spot easily veteran oblige"
   },
   "bubbleServerOptions": {
