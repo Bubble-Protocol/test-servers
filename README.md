@@ -27,7 +27,7 @@ Configure bubble tools to use `local` as your server alias in `bubble content` c
 bubble servers add local http://127.0.0.1:8131
 ```
 
-If you want to deploy or interact with contracts on the Ganache instance then edit your `~/bubble-tools/providers` file and add the following chain:
+If you want to deploy or interact with contracts on the Ganache instance then edit your `~/.bubble-tools/providers` file and add the following chain:
 
 ```json
 {
